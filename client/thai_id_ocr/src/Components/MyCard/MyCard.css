@@ -1,7 +1,7 @@
 .card_link {
     padding: 50px;
     text-align: center;
-    background-color: rgb(246, 251, 255);
+    /* background-color: rgb(246, 251, 255); */
 }
 .card_link:hover {
     transform: scale(1.03);

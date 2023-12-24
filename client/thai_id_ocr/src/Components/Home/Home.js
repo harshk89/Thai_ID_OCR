@@ -1,8 +1,5 @@
 import React from 'react'
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import { Typography, Grid } from '@mui/material';
+import { Typography, Grid, CssBaseline, Container } from '@mui/material';
 
 import './Home.css';
 import MyCard from '../MyCard/MyCard';
@@ -12,7 +9,6 @@ const Home = () => {
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="md">
-        {/* <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} /> */}
         <Typography variant='h4' className="heading_1" sx={{fontWeight: "800", fontFamily: "sans-serif"}}>Welcome to Online THAI-ID Portal</Typography>
 
         <Grid container alignItems='stretch' spacing={3}>

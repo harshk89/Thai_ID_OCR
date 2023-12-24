@@ -24,7 +24,7 @@ const MyCard = (props) => {
     const navigate = useNavigate();
 
     const HandleClick = () => {
-        navigate(`/`);
+        navigate(`/${task}`);
     }
 
     return (
