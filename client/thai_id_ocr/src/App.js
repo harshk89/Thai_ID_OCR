@@ -6,6 +6,7 @@ import UploadPage from './Components/UploadPage/UploadPage';
 import DeletePage from './Components/DeletePage/DeletePage';
 import EditPage from './Components/EditPage/EditPage';
 import SearchPage from './Components/SearchPage/SearchPage';
+import About from './Components/About/About';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/delete" element={<DeletePage />} />
             <Route path="/edit" element={<EditPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/about" element={<About />} />
 
           </Routes>
       </BrowserRouter>
