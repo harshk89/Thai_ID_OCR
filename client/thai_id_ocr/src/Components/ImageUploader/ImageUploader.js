@@ -5,12 +5,12 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const ImageUploader = (props) => {
 
-    const {setSelectedImage} = props;
+    const {selectedImage, setSelectedImage} = props;
 
-  const [imageSrc, setImageSrc] = useState(null)
+  // const [imageSrc, setImageSrc] = useState(null)
   const [error, setError] = useState(null);
 
-  console.log(imageSrc, error)
+  // console.log(imageSrc, error)
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -34,7 +34,8 @@ const ImageUploader = (props) => {
       reader.onload = (event) => {
         // The result attribute contains the base64-encoded string
         const base64String = event.target.result;
-        setImageSrc(base64String);
+        // console.log(base64String);
+        // setImageSrc(base64String);
         setSelectedImage(base64String);
         setError(null);
       };
@@ -66,7 +67,7 @@ const ImageUploader = (props) => {
 
       reader.onload = (event) => {
         // Set the base64 representation of the image in the state
-        setImageSrc(event.target.result);
+        // setImageSrc(event.target.result);
         setSelectedImage(event.target.result);
         setError(null);
       };
@@ -111,11 +112,11 @@ const ImageUploader = (props) => {
           </Button>
         </label>
 
-        {imageSrc ? (
+        {selectedImage ? (
         <div>
           <Typography variant="subtitle1">Selected Image:</Typography>
           <img
-            src={imageSrc}
+            src={selectedImage}
             alt="Selected"
             style={{ maxWidth: '350px' }}
           />

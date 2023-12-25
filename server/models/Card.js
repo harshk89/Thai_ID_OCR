@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 
-const CardSchema = mongoose.Schema({
+const cardSchema = mongoose.Schema({
     first_name: String,
     last_name: String,
     id_num: String,
-    dob: Date,    //date of birth
-    doi: Date,    //date of issue
-    doe: Date,    //date of expiry
+    dob: String,    //date of birth
+    doi: String,    //date of issue
+    doe: String,    //date of expiry
     createdAt: {
         type: Date,
         default: new Date()
     }
 });
 
-const Card = mongoose.model('Card', CardSchema);
+const Card = mongoose.model('Card', cardSchema);
 
 export default Card;
