@@ -119,7 +119,62 @@ export const uploadCard = async (req, res) => {
     }
     
 }
+// const delay = ms => new Promise(res => setTimeout(res, ms));
 
-// const saveToDataBase = async ()=> {
+export const search = async (req, res) => {
+    const { idNum, fName, lName, dob, searchType } = req.query;
+    
+    try {
+        switch(searchType) {
+            case "idNum":
+                console.log(idNum);
+                var cards = await Card.find({id_num: idNum});
+                console.log(cards);
+                res.json({cards});
+                break;
+            case "name":
+                console.log(fName, lName);
+                var cards = await Card.find({
+                    first_name: { $regex: new RegExp(fName, 'i') },
+                    last_name: { $regex: new RegExp(lName, 'i') }
+                  });
+                console.log(cards);
+                res.json({cards});
+                break;
+            case "dob":
+                console.log(dob);
+                var cards = await Card.find({ dob: dob });
+                console.log(cards);
+                res.json({cards});
+                break;
+        }
+        // console.log("reached here!!");
+        // await delay(5000);
+        
+    } catch (error) {
+        res.status(409).json({ error, message: "Something went wrong!"});
+    }
+}
 
-// }
+export const editRecord = async (req, res) => {
+    const data = req.body;
+    console.log(data);
+    // console.log("reached here");
+    try {
+        var card = await Card.findOne({id_num: data.idNum});
+        // console.log(card);
+        if(card) {
+            console.log("hello", card._id);
+            const updatedRecord = await Card.findByIdAndUpdate(card._id, { id_num: data.idNum, first_name: data.fname, last_name: data.lname, dob: data.dateOfBirth, doi: data.dateOfIssue, doe: data.dateOfExpiry, _id}, {new: true});
+            console.log("updated: ", updatedRecord);
+            res.json(updatedRecord);
+        }
+        // else
+        //     console.log("reached hererer");
+        
+    } catch (error) {
+        res.status(409).json({ error, message: "Something went wrong!"});
+    }
+
+}
+

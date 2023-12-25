@@ -4,9 +4,9 @@ export default (state = {card: null, cards: [], isLoading: false, error: "none"}
             return { ...state, isLoading: true };
         case "END_LOADING":
             return { ...state, isLoading: false };
-        case "SEARCH_BY_ID":
+        case "SET_CARD":
             return { ...state, card: action.payload };
-        case "SEARCH_CARDS":
+        case "SET_CARDS":
             return { ...state, cards: action.payload };
         case "CLEAR_ALL":
             return { card: null, cards: [], isLoading: false, error: "none" };

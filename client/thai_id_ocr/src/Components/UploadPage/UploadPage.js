@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { Typography, Container, Box, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react'
+import { Typography, Container, Box, Button, Alert, AlertTitle } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import ImageUploader from '../ImageUploader/ImageUploader';
 import { useDispatch, useSelector } from 'react-redux';
 import { uploadCard, clearAll } from '../../actions/actions.js';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 
 const UploadPage = () => {
@@ -14,7 +14,14 @@ const UploadPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   // const [output, setOutput] = useState(null);
-  const { card, cards, isLoading, error } = useSelector((state) => state);
+  const { card, isLoading, error } = useSelector((state) => state);
+
+  useEffect(() => {
+    return () => {
+      handleClear();
+    }
+  }, [])
+  
 
   const dispatch = useDispatch();
 
@@ -26,7 +33,7 @@ const UploadPage = () => {
 
   const handleClear = () => {
     dispatch(clearAll());
-    setSelectedImage(null);
+    // setSelectedImage(null);
   }
 
   const styles = {
@@ -62,7 +69,13 @@ const UploadPage = () => {
         </div>
       </div>
       { error!=="none" ? (
+        <>
         <Typography>{error}</Typography>
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          Process was not completed!
+      </Alert>
+        </>
       ):(card!=null && !isLoading && (
           <Container sx={{padding: "10px",margin: "16px", border: '1px solid #ccc', borderRadius: '8px'}}>
             <Typography style={styles.text}>Identification Number: {card.id_num}</Typography>
@@ -71,6 +84,10 @@ const UploadPage = () => {
             <Typography style={styles.text}>Date of Birth: {card.dob}</Typography>
             <Typography style={styles.text}>Date of Issue: {card.doi}</Typography>
             <Typography style={styles.text}>Date of Expiry: {card.doe}</Typography>
+            <Alert severity="success">
+              <AlertTitle>Success</AlertTitle>
+              ID Card successfully stored!
+            </Alert>
           </Container>
     ))}
 
