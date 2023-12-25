@@ -41,7 +41,6 @@ const SearchPage = () => {
     setFName("");
     setLName("");
     dispatch(clearAll());
-    // setSelectedImage(null);
   }
 
   const styles = {
@@ -68,7 +67,6 @@ const SearchPage = () => {
         <MenuItem value="idNum">ID Number</MenuItem>
         <MenuItem value="name">Name</MenuItem>
         <MenuItem value="dob">Date of Birth</MenuItem>
-        {/* Add more search options as needed */}
       </Select>
 
       {searchType==='idNum' && (<TextField

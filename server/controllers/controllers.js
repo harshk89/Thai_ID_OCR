@@ -8,7 +8,7 @@ const parseExtractedInfo = (textArray) => {
     //----------extracting identification number---------
     var index = textArray.findIndex(element => /\d/.test(element));
     let idNum = textArray[index] + " " + textArray[index+1] + " " + textArray[index+2] + " " + textArray[index+3] + " " + textArray[index+4];
-    console.log("identification number: ", idNum);
+    // console.log("identification number: ", idNum);
 
     //delete elements of array upto index+4
     textArray.splice(0, index + 5);
@@ -24,7 +24,7 @@ const parseExtractedInfo = (textArray) => {
         firstName += textArray[index] + " ";
     }
     firstName = firstName.trim();
-    console.log("first name: ", firstName);
+    // console.log("first name: ", firstName);
 
     //now index is at element "Last"
     var lastName = "";
@@ -35,7 +35,7 @@ const parseExtractedInfo = (textArray) => {
         lastName += textArray[index] + " ";
     }
     lastName = lastName.trim();
-    console.log("last name: ", lastName);
+    // console.log("last name: ", lastName);
 
     //now index is at element "เกิดวันที่"
     //delete elements of array upto this point so it does not hinder further search
@@ -44,19 +44,19 @@ const parseExtractedInfo = (textArray) => {
     //------------now extracting Date of Birth-------------
     var index = textArray.findIndex(element => element==="Birth");
     var dob = textArray[index+1] + " " + textArray[index+2] + " " + textArray[index+3];
-    console.log("Date of Birth: ", dob);
+    // console.log("Date of Birth: ", dob);
 
     //------------now extracting Date of Issue-------------
     //date of issue is always present after "วันออกบัตร"
     var index = textArray.findIndex(element => element==="วันออกบัตร");
     var doi = textArray[index+1] + " " + textArray[index+2] + " " + textArray[index+3];
-    console.log("Date of Issue: ", doi);
+    // console.log("Date of Issue: ", doi);
 
     //------------now extracting Date of Expiry-------------
     //date of expiry is always present after "วันบัตรหมดอายุ"
     var index = textArray.findIndex(element => element==="วันบัตรหมดอายุ");
     var doe = textArray[index+1] + " " + textArray[index+2] + " " + textArray[index+3];
-    console.log("Date of Expiry: ", doe);
+    // console.log("Date of Expiry: ", doe);
 
     return {
         idNum: idNum,
@@ -76,7 +76,7 @@ export const uploadCard = async (req, res) => {
         var extractedText = await detectText(image);
 
         const textArray = extractedText.split(/\s+/);
-        console.log(textArray);
+        // console.log(textArray);
 
         //now parsing the extracted text
         const parsedInfo = parseExtractedInfo(textArray);
@@ -98,7 +98,7 @@ export const uploadCard = async (req, res) => {
             doi: parsedInfo.doi,
             doe: parsedInfo.doe,
         };
-        console.log("card", card);
+        // console.log("card", card);
 
         const newCard = new Card({ ...card });
 
@@ -127,24 +127,24 @@ export const search = async (req, res) => {
     try {
         switch(searchType) {
             case "idNum":
-                console.log(idNum);
+                // console.log(idNum);
                 var cards = await Card.find({id_num: idNum});
-                console.log(cards);
+                // console.log(cards);
                 res.json({cards});
                 break;
             case "name":
-                console.log(fName, lName);
+                // console.log(fName, lName);
                 var cards = await Card.find({
                     first_name: { $regex: new RegExp(fName, 'i') },
                     last_name: { $regex: new RegExp(lName, 'i') }
                   });
-                console.log(cards);
+                // console.log(cards);
                 res.json({cards});
                 break;
             case "dob":
-                console.log(dob);
+                // console.log(dob);
                 var cards = await Card.find({ dob: dob });
-                console.log(cards);
+                // console.log(cards);
                 res.json({cards});
                 break;
         }
@@ -158,19 +158,39 @@ export const search = async (req, res) => {
 
 export const editRecord = async (req, res) => {
     const data = req.body;
-    console.log(data);
+
+    const newData = {
+        first_name: data.fname,
+        last_name: data.lname,
+        id_num: data.idNum,
+        dob: data.dateOfBirth,
+        doi: data.dateOfIssue,
+        doe: data.dateOfExpiry
+    }
+    // console.log(data);
     // console.log("reached here");
     try {
-        var card = await Card.findOne({id_num: data.idNum});
-        // console.log(card);
-        if(card) {
-            console.log("hello", card._id);
-            const updatedRecord = await Card.findByIdAndUpdate(card._id, { id_num: data.idNum, first_name: data.fname, last_name: data.lname, dob: data.dateOfBirth, doi: data.dateOfIssue, doe: data.dateOfExpiry, _id}, {new: true});
-            console.log("updated: ", updatedRecord);
-            res.json(updatedRecord);
+        // var card = await Card.findOne({id_num: data.idNum});
+        var idNum = data.idNum;
+        var result = await Card.updateOne({ id_num: data.idNum }, { $set: newData });
+        // console.log("result: ", result);
+
+        if (result.matchedCount == 0) {
+            // console.log(`No card found with idNum: ${idNum}`);
+            res.json({message: "No record found!"});
         }
-        // else
-        //     console.log("reached hererer");
+        else {
+            // console.log(`Card with idNum ${idNum} updated successfully`);
+            res.json({message: "Record updated", newRecord: newData});
+        }
+        
+    
+        // if(card) {
+        //     console.log("hello", card._id);
+        //     const updatedRecord = await Card.findByIdAndUpdate(card._id, { ...card, id_num: data.idNum, first_name: data.fname, last_name: data.lname, dob: data.dateOfBirth, doi: data.dateOfIssue, doe: data.dateOfExpiry, _id}, {new: true});
+        //     console.log("updated: ", updatedRecord); }
+
+        
         
     } catch (error) {
         res.status(409).json({ error, message: "Something went wrong!"});
@@ -178,3 +198,26 @@ export const editRecord = async (req, res) => {
 
 }
 
+
+export const deleteRecord = async (req, res) => {
+ 
+    const { idNum: idNum } = req.params;
+    // console.log("reached here", idNum)
+
+    try {
+        const result = await Card.deleteOne({ idNum });
+        // console.log(result);
+
+        if (result.deletedCount === 0) {
+        // console.log(`No card found with idNum: ${idNum}`);
+        res.json({message: "No record found!"});
+        }
+        else {
+            // console.log(`Card with idNum ${idNum} deleted successfully`);
+            res.json({message: "Record deleted"});
+        }
+    } catch (error) {
+        res.status(409).json({ error, message: "Something went wrong!"});
+    }
+
+}

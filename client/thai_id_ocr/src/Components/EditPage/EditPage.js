@@ -8,7 +8,7 @@ import './EditPage.css'
 
 const EditPage = () => {
 
-  const { cards, isLoading, error } = useSelector((state) => state);
+  const { card, isLoading, error } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -147,25 +147,19 @@ const EditPage = () => {
           Process was not completed!
         </Alert>
         </>
-      ):(cards.length>0 && !isLoading && (
-          <Container sx={{padding: "10px",marginTop: "16px", border: '1px solid #ccc', borderRadius: '8px'}}>
-            <Alert severity="success">
-              <AlertTitle>Success</AlertTitle>
-                {cards.length} record(s) found.
-            </Alert>
-            <Grid container alignItems='stretch' spacing={4}>
-              {cards.map((card) => (
-                <Grid key={card._id} item xs={12} sm={12} md={6} lg={6}>
-                  <Typography style={styles.text}>Identification Number: {card.id_num}</Typography>
-                  <Typography style={styles.text}>First Name: {card.first_name}</Typography>
-                  <Typography style={styles.text}>Last Name: {card.last_name}</Typography>
-                  <Typography style={styles.text}>Date of Birth: {card.dob}</Typography>
-                  <Typography style={styles.text}>Date of Issue: {card.doi}</Typography>
-                  <Typography style={styles.text}>Date of Expiry: {card.doe}</Typography>
-                </Grid>
-              ))}
-            </Grid>
-          </Container>
+      ):(card!=null && !isLoading && (
+        <Container sx={{padding: "10px",margin: "16px", border: '1px solid #ccc', borderRadius: '8px'}}>
+          <Typography style={styles.text}>Identification Number: {card.id_num}</Typography>
+          <Typography style={styles.text}>First Name: {card.first_name}</Typography>
+          <Typography style={styles.text}>Last Name: {card.last_name}</Typography>
+          <Typography style={styles.text}>Date of Birth: {card.dob}</Typography>
+          <Typography style={styles.text}>Date of Issue: {card.doi}</Typography>
+          <Typography style={styles.text}>Date of Expiry: {card.doe}</Typography>
+          <Alert severity="success">
+            <AlertTitle>Success</AlertTitle>
+            Record successfully updated!
+          </Alert>
+        </Container>
     ))}
     </div>
     </Container>

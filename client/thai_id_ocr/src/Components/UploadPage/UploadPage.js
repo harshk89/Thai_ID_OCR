@@ -33,7 +33,6 @@ const UploadPage = () => {
 
   const handleClear = () => {
     dispatch(clearAll());
-    // setSelectedImage(null);
   }
 
   const styles = {
@@ -91,17 +90,6 @@ const UploadPage = () => {
           </Container>
     ))}
 
-      
-      {/* {card!=null && !isLoading && (
-        <Container sx={{padding: "10px",margin: "16px", border: '1px solid #ccc', borderRadius: '8px'}}>
-          <Typography style={styles.text}>Identification Number: {card.id_num}</Typography>
-          <Typography style={styles.text}>First Name: {card.first_name}</Typography>
-          <Typography style={styles.text}>Last Name: {card.last_name}</Typography>
-          <Typography style={styles.text}>Date of Birth: {card.dob}</Typography>
-          <Typography style={styles.text}>Date of Issue: {card.doi}</Typography>
-          <Typography style={styles.text}>Date of Expiry: {card.doe}</Typography>
-        </Container>
-      )} */}
     </Container>
   )
 }
