@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const url = 'http://localhost:5000';
+// const url = 'http://localhost:5000';
+const url = 'https://thai-id-ocr-rhhe.onrender.com';
 
 const API = axios.create({ baseURL: url });
 
