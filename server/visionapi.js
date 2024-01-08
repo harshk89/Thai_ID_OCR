@@ -25,6 +25,9 @@ class CustomError extends Error {
 const detectText = async (image) => {
 
     try {
+
+        console.log("PRIVATE_KEY:", process.env.PRIVATE_KEY);
+        console.log("CLIENT_EMAIL:", process.env.CLIENT_EMAIL)
         
         const index = image.indexOf("base64");
         // console.log("index: ", index);
