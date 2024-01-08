@@ -14,6 +14,14 @@ const CONFIG = {
 // Creates a client
 const client = new ImageAnnotatorClient(CONFIG);
 
+class CustomError extends Error {
+    constructor(message, statusCode) {
+      super();
+      this.message = message;
+      this.statusCode = statusCode || 500;
+    }
+}
+
 const detectText = async (image) => {
 
     try {
@@ -22,25 +30,24 @@ const detectText = async (image) => {
         // console.log("index: ", index);
         var newImage = image.substring(index+7);
 
-
-
         // console.log(newimage.substring(0,5));
         const buffer = Buffer.from(newImage, 'base64');
 
         // fs.writeFileSync('decoded_image.jpg', buffer);
         // console.log("buffer length: ", buffer.length)
         let [result] = await client.textDetection(buffer);
+        // console.log(result);
+        if(result.fullTextAnnotation === null)
+            throw new CustomError("Invalid Image!, Please upload THAI NATIONAL ID CARD", 406);
         const text = result.fullTextAnnotation.text;
-        console.log(text);
-        console.log("type: ", typeof(text));
+        // console.log(text);
 
         return text;
         
     } catch (error) {
-        console.error('Error: ', error);
+        console.error('Error in visionapi: ', error);
+        throw error;
     }
 }
-
-// detectText(base64Image);
 
 export default detectText;

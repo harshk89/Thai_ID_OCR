@@ -68,15 +68,26 @@ const parseExtractedInfo = (textArray) => {
     };
 };
 
+class CustomError extends Error {
+    constructor(message, statusCode) {
+      super();
+      this.message = message;
+      this.statusCode = statusCode || 500;
+    }
+}
+
 export const uploadCard = async (req, res) => {
-    // console.log(req.body);
+
     const { image } = req.body;
-    var cardAlreadyExists = false;
     try {
         var extractedText = await detectText(image);
 
         const textArray = extractedText.split(/\s+/);
         // console.log(textArray);
+
+        if(textArray[0] !== "บัตรประจำตัวประชาชน") {
+            throw new CustomError("Invalid Image!, Please upload THAI NATIONAL ID CARD", 406);
+        }
 
         //now parsing the extracted text
         const parsedInfo = parseExtractedInfo(textArray);
@@ -84,8 +95,7 @@ export const uploadCard = async (req, res) => {
         const existingCard = await Card.findOne({ id_num: parsedInfo.idNum });
 
         if(existingCard) {
-            cardAlreadyExists = true;
-            throw new Error('Card already exists');
+            throw new CustomError('Card already exists!', 409);
         }
 
         //----------saving the parsed info in the database------------
@@ -105,26 +115,27 @@ export const uploadCard = async (req, res) => {
         try {
             newCard.save();
         } catch (error) {
-            throw error;
+            throw new CustomError("Could not save card to database!", 500);
         }
 
         res.status(201).json(newCard);
 
         // res.status(201).json(parsedInfo);
     } catch (error) {
-        if(cardAlreadyExists)
-            res.status(409).json({ error, message: "Card already exists!" });
-        else
-            res.status(409).json({ error, message: "Something went wrong!"});
+        res.status(error.statusCode || 500).json(error);
     }
     
 }
 // const delay = ms => new Promise(res => setTimeout(res, ms));
 
+
+
 export const search = async (req, res) => {
     const { idNum, fName, lName, dob, searchType } = req.query;
     
     try {
+        // console.log("reached here!!");
+        // throw new CustomError("customm error message!!");
         switch(searchType) {
             case "idNum":
                 // console.log(idNum);
@@ -152,7 +163,8 @@ export const search = async (req, res) => {
         // await delay(5000);
         
     } catch (error) {
-        res.status(409).json({ error, message: "Something went wrong!"});
+        console.log(error)
+        res.status(409).json(error);
     }
 }
 

@@ -69,10 +69,10 @@ const UploadPage = () => {
       </div>
       { error!=="none" ? (
         <>
-        <Typography>{error}</Typography>
+        
         <Alert severity="error">
           <AlertTitle>Error</AlertTitle>
-          Process was not completed!
+          <Typography>{error}</Typography>
       </Alert>
         </>
       ):(card!=null && !isLoading && (

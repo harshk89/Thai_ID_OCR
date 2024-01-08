@@ -11,9 +11,7 @@ export const uploadCard = (image) => async (dispatch) => {
 
         const data = received.data;
 
-        // console.log("received message: ", received.data);
-
-        // console.log("WORKING!!");
+        console.log("received message: ", received.data);
 
         dispatch({ type: "SET_CARD", payload: data});
         dispatch({ type: "SET_ERROR", payload: "none"});
@@ -21,7 +19,7 @@ export const uploadCard = (image) => async (dispatch) => {
         
 
     } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
         dispatch({ type: "SET_ERROR", payload: error.response.data.message});
         console.log(error);
         dispatch({ type: "END_LOADING" });
