@@ -6,7 +6,7 @@ dotenv.config();
 
 const CONFIG = {
     credentials: {
-        private_key: process.env.PRIVATE_KEY.split(String.raw`\n`).join('\n'),
+        private_key: process.env.PRIVATE_KEY.split(String.raw`\n`).join('\\n'),
         client_email: process.env.CLIENT_EMAIL
     }
 };
@@ -26,7 +26,7 @@ const detectText = async (image) => {
 
     try {
 
-        console.log("PRIVATE_KEY:", process.env.PRIVATE_KEY.split(String.raw`\n`).join('\n'));
+        console.log("PRIVATE_KEY:", process.env.PRIVATE_KEY.split(String.raw`\n`).join('\\n'));
         console.log("CLIENT_EMAIL:", process.env.CLIENT_EMAIL)
         
         const index = image.indexOf("base64");
